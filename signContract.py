@@ -2,43 +2,62 @@ import time
 
 from selenium.webdriver.common.by import By
 from Base import Base
-from login import login
+from login import Login
 
 
-
-class signContract(Base):
+class SignContract(Base):
+    def setup_class(self):
+        pass
+    def teardown_class(self):
+        self.driver.quit()
     #经办签发条
-    def signContract(self):
-        # Base.driver(Base)
-        # print(self.driver)
-        # self.driver.implicitly_wait(5)
-        # print(self.driver.current_window_handle)
-        # print(self.driver.window_handles)
+    def signContract_Operator(self):
         #点击融票导航按钮
-        self.driver.find_element(by=By.XPATH,value='//*[@id="app"]/div/div[1]/div[1]/div[2]/ul/a[1]').click()
+        self.driver.find_element(By.LINK_TEXT,"融票").click()
         #点击去签发按钮
-        self.driver.find_element(by=By.XPATH,value='//*[@id="app"]/div/div[2]/div/div[3]/div/div[2]/div/div/div[1]/div[1]/div/h3/button[2]').click()
+        self.driver.find_element(By.CSS_SELECTOR,'.fr.ivu-btn.ivu-btn-primary').click()
         #点击单笔签发按钮
-        self.driver.find_element(by=By.ID,value='BTN0049').click()
+        self.driver.find_element(By.CSS_SELECTOR,'#BTN0049').click()
         #点击供应商选择框
-        self.driver.find_element(by=By.XPATH,value='/html/body/div[4]/div[2]/div/div/div[2]/form/div/div/div[2]/div/div/div[1]/div/input').click()
+        self.driver.find_element(By.CSS_SELECTOR,'[placeholder="请选择供应商"]').click()
         #再下拉框中选择供应商
-        self.driver.find_element(by=By.XPATH,value='/html/body/div[4]/div[2]/div/div/div[2]/form/div/div/div[2]/div/div/div[2]/ul[2]/li[6]').click()
+        self.driver.find_element(By.XPATH,'//li[text()="万华实业集团有限公司"]').click()
         #输入金额
-        self.driver.find_element(by=By.XPATH,value='/html/body/div[4]/div[2]/div/div/div[2]/form/div/div/div[3]/div/div/div[2]/input').send_keys('5000')
+        self.driver.find_element(By.CSS_SELECTOR,'[placeholder="请输入融票金额，最多为14位整数2位小数"]').send_keys('5000')
         #点击日期选择框
-        self.driver.find_element(by=By.XPATH,value='/html/body/div[4]/div[2]/div/div/div[2]/form/div/div/div[4]/div/div[1]/div[1]/div/div/input').click()
-        #点击日期选择框右翻页按钮
-        self.driver.find_element(by=By.XPATH,value='/html/body/div[4]/div[2]/div/div/div[2]/form/div/div/div[4]/div/div[1]/div[2]/div/div/div/div[1]/span[5]').click()
-        #选择日期
-        self.driver.find_element(by=By.XPATH,value='/html/body/div[4]/div[2]/div/div/div[2]/form/div/div/div[4]/div/div[1]/div[2]/div/div/div/div[2]/div/span[25]/em').click()
+        js = """document.querySelector('[placeholder="请选择承诺付款日期"]').removeAttribute('autocomplete')"""
+        self.driver.execute_script(js)
+        self.driver.find_element(By.CSS_SELECTOR, '[placeholder="请选择承诺付款日期"]').send_keys('2023-05-10')
         #点击信息输入页面的确定按钮
-        self.driver.find_element(by=By.XPATH,value='/html/body/div[4]/div[2]/div/div/div[3]/div/button[1]').click()
+        self.driver.find_element(By.XPATH,'//span[text()="确认"]').click()
         #点击提示框的确定按钮
-        self.driver.find_element(by=By.XPATH,value='/html/body/div[8]/div/div/div[2]/div/button').click()
-        print(self.driver.current_window_handle)
-        print(self.driver.window_handles)
+        time.sleep(2)
+        # self.driver.find_element(By.XPATH,'(//span[text()="确认"])[2]').click()
+        self.driver.find_element(By.CSS_SELECTOR, '.modal-footer span').click()
+        #选择签发的第一条数据
+        self.driver.find_element(By.XPATH,'(//*[@class="ivu-checkbox-input"])[2]').click()
+        #下页面滚动条
+        self.driver.execute_script("window.scrollTo(0,769)")
+        #经办点击提交审核按钮
+        self.driver.find_element(By.XPATH,'//span[text()="提交审核"]').click()
+        #弹出提示弹窗，点击确定
+        self.driver.find_element(By.XPATH,'(//span[text()="确定"])[2]').click()
+        self.driver.quit()
 
-if __name__ == '__main__':
-    login.login(login)
-    signContract.signContract(signContract)
+    def signContract_Executive(self):
+        # 点击融票导航按钮
+        self.driver.find_element(By.LINK_TEXT, "融票").click()
+        #点击去审核
+        self.driver.find_element(By.XPATH, '//span[text()="去审核"]').click()
+        # 选择签发待审核的第一条数据
+        self.driver.find_element(By.XPATH, '(//*[@class="ivu-checkbox-input"])[2]').click()
+        #下页面滚动条
+        self.driver.execute_script("window.scrollTo(0,769)")
+        # 主管点击审核通过按钮
+        self.driver.find_element(By.XPATH, '//span[text()="审核通过"]').click()
+
+# if __name__ == '__main__':
+#     # Login('core', 'core_operator', 'core_operator_password').login()
+#     # SignContract.signContract_Operator(SignContract)
+Login('core', 'core_executive', 'core_executive_password').login()
+SignContract.signContract_Executive(SignContract)
