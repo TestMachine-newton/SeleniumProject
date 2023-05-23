@@ -27,7 +27,7 @@ class SignContract(Base):
         #点击日期选择框
         js = """document.querySelector('[placeholder="请选择承诺付款日期"]').removeAttribute('autocomplete')"""
         self.driver.execute_script(js)
-        self.driver.find_element(By.CSS_SELECTOR, '[placeholder="请选择承诺付款日期"]').send_keys('2023-05-10')
+        self.driver.find_element(By.CSS_SELECTOR, '[placeholder="请选择承诺付款日期"]').send_keys('2023-07-10')
         #点击信息输入页面的确定按钮
         self.driver.find_element(By.XPATH,'//span[text()="确认"]').click()
         #点击提示框的确定按钮
@@ -56,8 +56,8 @@ class SignContract(Base):
         # 主管点击审核通过按钮
         self.driver.find_element(By.XPATH, '//span[text()="审核通过"]').click()
 
-# if __name__ == '__main__':
-#     # Login('core', 'core_operator', 'core_operator_password').login()
-#     # SignContract.signContract_Operator(SignContract)
-Login('core', 'core_executive', 'core_executive_password').login()
-SignContract.signContract_Executive(SignContract)
+if __name__ == '__main__':
+    # Login('core', 'core_operator', 'core_operator_password').login()
+    # SignContract.signContract_Operator(SignContract)
+    Login('core', 'core_executive', 'core_executive_password').login()
+    SignContract.signContract_Executive(SignContract)

@@ -53,14 +53,14 @@ class Base():
         return self.url
 
     def setup(self):
-        # chrome_options = Options()
+        chrome_options = Options()
         # 和浏览器打开的调试端口进行通信，浏览器使用chrome --remote-debugging-port=9222 开启调试
-        # chrome_options.debugger_address = "127.0.0.1:9222"
-        # self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver = Base.driver(Base)
-        self.url = Base.url(Base)
-        self.driver.maximize_window()
-        self.driver.get(self.url)
+        chrome_options.debugger_address = "127.0.0.1:9222"
+        self.driver = webdriver.Chrome(options=chrome_options)
+        # self.driver = Base.driver(Base)
+        # self.url = Base.url(Base)
+        # self.driver.maximize_window()
+        self.driver.get(Base.url(Base))
         self.driver.refresh()
         self.driver.implicitly_wait(5)
     def teardown(self):
