@@ -15,12 +15,11 @@ class Login(Base):
         self.driver.find_element(By.ID,'password').send_keys(self.passeord)
         self.driver.find_element(By.NAME, "smsVerifyCode").send_keys("1234")
         self.driver.find_element(By.LINK_TEXT,'获取验证码').click()
-        time.sleep(10)
+        time.sleep(6)
         self.driver.find_element(By.ID,'loginSubmit').click()
         # cookies = self.driver.get_cookies()
         # print(self.driver.current_window_handle)
         # print(self.driver.window_handles)
         # print(cookies)
-#
-# if __name__ == '__main__':
-#     Login('core','core_operator','core_operator_password').login()
+if __name__ == '__main__':
+    Login('core','core_operator','core_operator_password').login()

@@ -1,3 +1,4 @@
+import random
 import time
 
 from selenium.webdriver.common.by import By
@@ -6,10 +7,7 @@ from login import Login
 
 
 class SignContract(Base):
-    def setup_class(self):
-        pass
-    def teardown_class(self):
-        self.driver.quit()
+
     #经办签发条
     def signContract_Operator(self):
         #点击融票导航按钮
@@ -23,7 +21,7 @@ class SignContract(Base):
         #再下拉框中选择供应商
         self.driver.find_element(By.XPATH,'//li[text()="万华实业集团有限公司"]').click()
         #输入金额
-        self.driver.find_element(By.CSS_SELECTOR,'[placeholder="请输入融票金额，最多为14位整数2位小数"]').send_keys('5000')
+        self.driver.find_element(By.CSS_SELECTOR,'[placeholder="请输入融票金额，最多为14位整数2位小数"]').send_keys(random.randint(5000,10000))
         #点击日期选择框
         js = """document.querySelector('[placeholder="请选择承诺付款日期"]').removeAttribute('autocomplete')"""
         self.driver.execute_script(js)
@@ -42,7 +40,7 @@ class SignContract(Base):
         self.driver.find_element(By.XPATH,'//span[text()="提交审核"]').click()
         #弹出提示弹窗，点击确定
         self.driver.find_element(By.XPATH,'(//span[text()="确定"])[2]').click()
-        self.driver.quit()
+
 
     def signContract_Executive(self):
         # 点击融票导航按钮
@@ -55,9 +53,14 @@ class SignContract(Base):
         self.driver.execute_script("window.scrollTo(0,769)")
         # 主管点击审核通过按钮
         self.driver.find_element(By.XPATH, '//span[text()="审核通过"]').click()
+        # 点击审核通过后的弹窗上的确定按钮
+        self.driver.find_element(By.XPATH,'//*[@class="ivu-modal-body"]//span[text()="确定"]').click()
 
 if __name__ == '__main__':
     # Login('core', 'core_operator', 'core_operator_password').login()
-    # SignContract.signContract_Operator(SignContract)
+    # for i in range(5):
+    #     SignContract.signContract_Operator(SignContract)
+
     Login('core', 'core_executive', 'core_executive_password').login()
-    SignContract.signContract_Executive(SignContract)
+    for i in range(10):
+        SignContract.signContract_Executive(SignContract)
