@@ -40,6 +40,8 @@ class SignContract(Base):
         self.driver.find_element(By.XPATH,'//span[text()="提交审核"]').click()
         #弹出提示弹窗，点击确定
         self.driver.find_element(By.XPATH,'(//span[text()="确定"])[2]').click()
+        # self.driver.close()
+        # self.driver.quit()
 
 
     def signContract_Executive(self):
@@ -60,7 +62,7 @@ if __name__ == '__main__':
     # Login('core', 'core_operator', 'core_operator_password').login()
     # for i in range(5):
     #     SignContract.signContract_Operator(SignContract)
-
+    #
     Login('core', 'core_executive', 'core_executive_password').login()
-    for i in range(10):
+    for i in range(5):
         SignContract.signContract_Executive(SignContract)
